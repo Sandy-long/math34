@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>概率初步与整除问题综合</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 8px;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 30px;
+            border-left: 4px solid #3498db;
+            padding-left: 10px;
+        }
+        h3 {
+            color: #16a085;
+            margin-top: 20px;
+        }
+        .section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .method {
+            background-color: #f1f9fe;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3498db;
+        }
+        .method-title {
+            font-weight: bold;
+            color: #2980b9;
+            margin-bottom: 10px;
+        }
+        .question {
+            font-weight: bold;
+            margin: 20px 0 10px;
+            color: #e74c3c;
+        }
+        .answer {
+            color: #27ae60;
+            margin-left: 20px;
+            padding-left: 10px;
+            border-left: 2px solid #2ecc71;
+        }
+        
+        /* 概率动画 */
+        .probability-animation {
+            width: 100%;
+            height: 200px;
+            position: relative;
+            margin: 20px auto;
+            background-color: #f5f7fa;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .dice {
+            width: 60px;
+            height: 60px;
+            background-color: white;
+            border-radius: 10px;
+            margin: 0 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            animation: diceRoll 2s infinite;
+        }
+        @keyframes diceRoll {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(90deg); }
+            50% { transform: rotate(180deg); }
+            75% { transform: rotate(270deg); }
+        }
+        
+        /* 独立性动画 */
+        .independence-animation {
+            width: 100%;
+            height: 200px;
+            position: relative;
+            margin: 20px auto;
+            background-color: #f5f7fa;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .coin {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #e74c3c;
+            margin: 0 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            animation: coinFlip 3s infinite;
+        }
+        @keyframes coinFlip {
+            0%, 100% { transform: rotateY(0deg); background-color: #e74c3c; }
+            50% { transform: rotateY(180deg); background-color: #2ecc71; }
+        }
+        
+        /* 试除法动画 */
+        .division-animation {
+            width: 100%;
+            height: 200px;
+            position: relative;
+            margin: 20px auto;
+            background-color: #f5f7fa;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .number-bubble {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #3498db;
+            margin: 0 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+            position: relative;
+            animation: numberDivide 4s infinite;
+        }
+        .divisor {
+            position: absolute;
+            bottom: -20px;
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        @keyframes numberDivide {
+            0%, 100% { transform: scale(1); background-color: #3498db; }
+            25% { transform: scale(0.9); background-color: #2ecc71; }
+            50% { transform: scale(1); background-color: #e74c3c; }
+            75% { transform: scale(0.9); background-color: #9b59b6; }
+        }
+        
+        /* 蚂蚁回家动画 */
+        .ant-animation {
+            width: 100%;
+            height: 200px;
+            position: relative;
+            margin: 20px auto;
+            background-color: #f5f7fa;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .cube {
+            width: 150px;
+            height: 150px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            perspective: 800px;
+        }
+        .face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 2px solid #2c3e50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            backface-visibility: hidden;
+        }
+        .front {
+            background-color: rgba(255,255,255,0.8);
+            transform: translateZ(75px);
+        }
+        .back {
+            background-color: rgba(255,255,255,0.8);
+            transform: rotateY(180deg) translateZ(75px);
+        }
+        .right {
+            background-color: rgba(255,255,255,0.8);
+            transform: rotateY(90deg) translateZ(75px);
+        }
+        .left {
+            background-color: rgba(255,255,255,0.8);
+            transform: rotateY(-90deg) translateZ(75px);
+        }
+        .top {
+            background-color: rgba(255,255,255,0.8);
+            transform: rotateX(90deg) translateZ(75px);
+        }
+        .bottom {
+            background-color: rgba(255,255,255,0.8);
+            transform: rotateX(-90deg) translateZ(75px);
+        }
+          .ant-path {
+      width: 200px;
+      height: 200px;
+      border: 1px solid #ccc;
+      position: relative;
+      margin: 0 auto;
+      background: #ecf0f1;
+    }
+    .ant {
+      width: 10px;
+      height: 10px;
+      background: #e74c3c;
+      border-radius: 50%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      animation: moveAnt 6s linear infinite;
+    }
+    @keyframes moveAnt {
+      0% { top: 0; left: 0; }
+      25% { top: 0; left: 190px; }
+      50% { top: 190px; left: 190px; }
+      75% { top: 190px; left: 0; }
+      100% { top: 0; left: 0; }
+    }
+    </style>
+</head>
+<body>
+    <h1>趣味数学34</h1>
+    
+    <h2>概率初步</h2>
+    
+    <div class="section">
+        <h3>1. 古典概型</h3>
+        
+        <div class="probability-animation">
+            <div class="dice">1</div>
+            <div class="dice">2</div>
+            <div class="dice">3</div>
+            <div class="dice">4</div>
+            <div class="dice">5</div>
+            <div class="dice">6</div>
+        </div>
+        
+        <div class="method">
+            <p><strong>运算法则：</strong></p>
+            <ul>
+                <li>概率 = 事件发生的有利结果数 ÷ 所有可能结果总数</li>
+                <li>所有可能结果必须是等可能的</li>
+                <li>有利结果必须明确定义</li>
+            </ul>
+        </div>
+        
+        <div class="question">​​袋中有3个红球和7个蓝球，随机抽一个球，抽到红球的概率是多少？</div>
+        <div class="answer">3/10</div>
+        
+        <div class="question">从一副去掉大小王的扑克牌中随机抽一张，抽到红桃的概率是多少？</div>
+        <div class="answer">1/4</div>
+        
+        <div class="question">袋中3红球7蓝球，连续抽2球（不放回），至少抽到1个红球的概率是多少？</div>
+        <div class="answer">8/15</div>
+    </div>
+    
+    <div class="section">
+        <h3>2. 独立性与分步计算</h3>
+        
+        <div class="independence-animation">
+            <div class="coin">正</div>
+            <div class="coin">反</div>
+        </div>
+        
+        <div class="method">
+            <p><strong>运算法则：</strong></p>
+            <ul>
+                <li>两个事件独立时，总概率为各自概率乘积</li>
+                <li>多步事件概率计算要乘各步概率</li>
+                <li>不放回抽样时，概率会随抽样过程变化</li>
+            </ul>
+        </div>
+        
+        <div class="question">连续掷两次骰子，两次都掷出6的概率是多少？</div>
+        <div class="answer">每次掷出6的概率是1/6，两次独立事件概率为(1/6)×(1/6)=1/36</div>
+        
+        <div class="question">袋中有5个白球和5个黑球，连续抽2个球（每次抽后放回），都是白球的概率是多少？</div>
+        <div class="answer">每次抽白球概率5/10=1/2，两次独立事件概率为(1/2)×(1/2)=1/4</div>
+        
+        <div class="question">袋中有5个白球和5个黑球，不放回连续抽2个球，都是白球概率是多少？</div>
+        <div class="answer">第一次抽白球概率5/10=1/2，第二次抽白球概率4/9，总概率为(1/2)×(4/9)=2/9</div>
+    </div>
+    
+    <h2>整除问题综合</h2>
+    
+    <div class="section">
+        <h3>1. 试除法与数字谜法</h3>
+        
+        <div class="division-animation">
+            <div class="number-bubble">
+                12
+                <div class="divisor">÷3</div>
+            </div>
+            <div class="number-bubble">
+                4
+                <div class="divisor">整除</div>
+            </div>
+        </div>
+        
+        <div class="method">
+            <p><strong>运算法则：</strong></p>
+            <ul>
+                <li>用小于等于开方数的质数试除目标数，判断整除性</li>
+                <li>数字谜法结合数字特征（如末尾数字、数字和）判断整除</li>
+                <li>被3整除：数字和能被3整除</li>
+                <li>被9整除：数字和能被9整除</li>
+                <li>被2整除：末位是偶数</li>
+                <li>被5整除：末位是0或5</li>
+            </ul>
+        </div>
+        
+        <div class="question">判断12345能否被3整除？</div>
+        <div class="answer">能</div>
+        
+        <div class="question">判断252能否被9整除？</div>
+        <div class="answer">能</div>
+        
+        <div class="question">判断221是否是质数？</div>
+        <div class="answer">不是质数</div>
+    </div>
+    
+    <div class="section">
+        <h3>2. 蚂蚁回家问题</h3>
+        
+        <div class="ant-path">
+      <div class="ant"></div>
+    </div>
+<br>
+
+
+ <div class="method">
+            <p><strong>运算法则：</strong></p>
+            <ul>
+                 <li>求两点间最短路径，一般为直线距离</li>
+                <li>若路径受限制，则考虑绕行并计算总距离</li>
+                <li>在几何图形中，展开图形可能有助于找到最短路径</li>
+            </ul>
+        </div>
+         
+        
+        <div class="question">正方体边长为2cm，蚂蚁从顶点A到对面顶点B，最短路径需经过几个面？</div>
+        <div class="answer">展开立方体后，最短路径可能经过2个或3个面</div>
+        
+        <div class="question">长方体尺寸为2cm×3cm×6cm，蚂蚁从一角到对角的最短路径长度是多少？</div>
+        <div class="answer">√61 cm​</div>
+        
+        <div class="question">快递盒尺寸30cm×40cm×50cm，小虫从底部一角爬到顶部对角，最短需爬行多少厘米？</div>
+        <div class="answer"> ​​√7400 ≈ 86.02 cm​</div>
+    </div>
+</body>
+</html>
