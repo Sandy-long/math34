@@ -45,25 +45,53 @@
             margin-bottom: 20px;
             border-left: 4px solid #3498db;
         }
-        .method-title {
-            font-weight: bold;
-            color: #2980b9;
-            margin-bottom: 10px;
-        }
         .question {
             font-weight: bold;
             margin: 20px 0 10px;
             color: #e74c3c;
         }
+        .answer-container {
+            background: linear-gradient(135deg, #f0fff4 0%, #e6fffa 100%);
+            border: 1px solid #d1fae5;
+            border-radius: 8px;
+            padding: 5px 15px;
+            margin: 15px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .answer-container:hover {
+            background: linear-gradient(135deg, #dcffe4 0%, #c6f6d5 100%);
+            transform: translateX(5px);
+        }
+        .answer-prompt {
+            color: #10b981;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+        }
+        .answer-prompt:before {
+            content: "✨";
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
         .answer {
-            color: #27ae60;
+            color: #0f9d58;
             margin-left: 20px;
-            padding-left: 10px;
-            border-left: 2px solid #2ecc71;
+            padding: 10px 15px;
+            background-color: rgba(16, 185, 129, 0.1);
+            border-left: 3px solid #10b981;
+            border-radius: 0 8px 8px 0;
+            display: none;
+            font-weight: bold;
+            animation: fadeIn 0.5s ease;
+        }
+        .show-answer .answer {
+            display: block;
         }
         
-        /* 概率动画 */
-        .probability-animation {
+        /* 骰子动画 */
+        .dice-animation {
             width: 100%;
             height: 200px;
             position: relative;
@@ -97,8 +125,8 @@
             75% { transform: rotate(270deg); }
         }
         
-        /* 独立性动画 */
-        .independence-animation {
+        /* 硬币动画 */
+        .coin-animation {
             width: 100%;
             height: 200px;
             position: relative;
@@ -228,31 +256,36 @@
             background-color: rgba(255,255,255,0.8);
             transform: rotateX(-90deg) translateZ(75px);
         }
-          .ant-path {
-      width: 200px;
-      height: 200px;
-      border: 1px solid #ccc;
-      position: relative;
-      margin: 0 auto;
-      background: #ecf0f1;
-    }
-    .ant {
-      width: 10px;
-      height: 10px;
-      background: #e74c3c;
-      border-radius: 50%;
-      position: absolute;
-      top: 0;
-      left: 0;
-      animation: moveAnt 6s linear infinite;
-    }
-    @keyframes moveAnt {
-      0% { top: 0; left: 0; }
-      25% { top: 0; left: 190px; }
-      50% { top: 190px; left: 190px; }
-      75% { top: 190px; left: 0; }
-      100% { top: 0; left: 0; }
-    }
+        .ant-path {
+            width: 200px;
+            height: 200px;
+            border: 1px solid #ccc;
+            position: relative;
+            margin: 0 auto;
+            background: #ecf0f1;
+        }
+        .ant {
+            width: 10px;
+            height: 10px;
+            background: #e74c3c;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            animation: moveAnt 6s linear infinite;
+        }
+        @keyframes moveAnt {
+            0% { top: 0; left: 0; }
+            25% { top: 0; left: 190px; }
+            50% { top: 190px; left: 190px; }
+            75% { top: 190px; left: 0; }
+            100% { top: 0; left: 0; }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
@@ -263,7 +296,7 @@
     <div class="section">
         <h3>1. 古典概型</h3>
         
-        <div class="probability-animation">
+        <div class="dice-animation">
             <div class="dice">1</div>
             <div class="dice">2</div>
             <div class="dice">3</div>
@@ -281,20 +314,29 @@
             </ul>
         </div>
         
-        <div class="question">​​袋中有3个红球和7个蓝球，随机抽一个球，抽到红球的概率是多少？</div>
-        <div class="answer">3/10</div>
+        <div class="question">袋中有3个红球和7个蓝球，随机抽一个球，抽到红球的概率是多少？</div>
+        <div class="answer-container">
+            <div class="answer-prompt">点击显示答案</div>
+            <div class="answer">3/10</div>
+        </div>
         
         <div class="question">从一副去掉大小王的扑克牌中随机抽一张，抽到红桃的概率是多少？</div>
-        <div class="answer">1/4</div>
+        <div class="answer-container">
+            <div class="answer-prompt">点击显示答案</div>
+            <div class="answer">1/4</div>
+        </div>
         
         <div class="question">袋中3红球7蓝球，连续抽2球（不放回），至少抽到1个红球的概率是多少？</div>
-        <div class="answer">8/15</div>
+        <div class="answer-container">
+            <div class="answer-prompt">点击显示答案</div>
+            <div class="answer">8/15</div>
+        </div>
     </div>
     
     <div class="section">
         <h3>2. 独立性与分步计算</h3>
         
-        <div class="independence-animation">
+        <div class="coin-animation">
             <div class="coin">正</div>
             <div class="coin">反</div>
         </div>
@@ -309,13 +351,22 @@
         </div>
         
         <div class="question">连续掷两次骰子，两次都掷出6的概率是多少？</div>
-        <div class="answer">1/36</div>
+        <div class="answer-container">
+            <div class="answer-prompt">点击显示答案</div>
+            <div class="answer">1/36</div>
+        </div>
         
         <div class="question">袋中有5个白球和5个黑球，连续抽2个球（每次抽后放回），都是白球的概率是多少？</div>
-        <div class="answer">1/4</div>
+        <div class="answer-container">
+            <div class="answer-prompt">点击显示答案</div>
+            <div class="answer">1/4</div>
+        </div>
         
         <div class="question">袋中有5个白球和5个黑球，不放回连续抽2个球，都是白球概率是多少？</div>
-        <div class="answer">2/9</div>
+        <div class="answer-container">
+            <div class="answer-prompt">点击显示答案</div>
+            <div class="answer">2/9</div>
+        </div>
     </div>
     
     <h2>整除问题综合</h2>
@@ -347,42 +398,82 @@
         </div>
         
         <div class="question">判断12345能否被3整除？</div>
-        <div class="answer">能</div>
+        <div class="answer-container">
+            <div class="answer-prompt">点击显示答案</div>
+            <div class="answer">能（1+2+3+4+5=15，15能被3整除）</div>
+        </div>
         
         <div class="question">判断252能否被9整除？</div>
-        <div class="answer">能</div>
+        <div class="answer-container">
+            <div class="answer-prompt">点击显示答案</div>
+            <div class="answer">能（2+5+2=9，9能被9整除）</div>
+        </div>
         
         <div class="question">判断221是否是质数？</div>
-        <div class="answer">不是质数</div>
+        <div class="answer-container">
+            <div class="answer-prompt">点击显示答案</div>
+            <div class="answer">不是质数（221=13×17）</div>
+        </div>
     </div>
     
     <div class="section">
         <h3>2. 蚂蚁回家问题</h3>
         
-        <div class="ant-path">
-      <div class="ant"></div>
-    </div>
-<br>
-
-
- <div class="method">
+        <div class="ant-animation">
+            <div class="ant-path">
+                <div class="ant"></div>
+            </div>
+        </div>
+        
+        <div class="method">
             <p><strong>运算法则：</strong></p>
             <ul>
-                 <li>求两点间最短路径，一般为直线距离</li>
+                <li>求两点间最短路径，一般为直线距离</li>
                 <li>若路径受限制，则考虑绕行并计算总距离</li>
                 <li>在几何图形中，展开图形可能有助于找到最短路径</li>
             </ul>
         </div>
-         
         
         <div class="question">正方体边长为2cm，蚂蚁从顶点A到对面顶点B，最短路径需经过几个面？</div>
-        <div class="answer">展开立方体后，最短路径可能经过2个或3个面</div>
+        <div class="answer-container">
+            <div class="answer-prompt">点击显示答案</div>
+            <div class="answer">展开立方体后，最短路径可能经过2个或3个面</div>
+        </div>
         
         <div class="question">长方体尺寸为2cm×3cm×6cm，蚂蚁从一角到对角的最短路径长度是多少？</div>
-        <div class="answer">√61 cm​</div>
+        <div class="answer-container">
+            <div class="answer-prompt">点击显示答案</div>
+            <div class="answer">√61 cm</div>
+        </div>
         
         <div class="question">快递盒尺寸30cm×40cm×50cm，小虫从底部一角爬到顶部对角，最短需爬行多少厘米？</div>
-        <div class="answer"> ​​√7400 ≈ 86.02 cm​</div>
+        <div class="answer-container">
+            <div class="answer-prompt">点击显示答案</div>
+            <div class="answer">√7400 ≈ 86.02 cm</div>
+        </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 点击显示答案功能
+            document.body.addEventListener('click', function(e) {
+                const container = e.target.closest('.answer-container');
+                if(container) {
+                    container.classList.toggle('show-answer');
+                }
+            });
+            
+            // 骰子动画效果
+            const dice = document.querySelectorAll('.dice');
+            let currentDice = 0;
+            setInterval(() => {
+                dice[currentDice].style.animation = 'none';
+                setTimeout(() => {
+                    dice[currentDice].style.animation = 'diceRoll 2s infinite';
+                }, 10);
+                currentDice = (currentDice + 1) % dice.length;
+            }, 2000);
+        });
+    </script>
 </body>
 </html>
